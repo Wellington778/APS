@@ -24,11 +24,11 @@ async function getFireInfo() {
     return fireData
 }
 
-async function standardizeFireItem({ acq_date, latitude, longitude, frp, instrument }) {
+async function standardizeFireItem({ acq_date, latitude, longitude, frp }) {
 
     const data = acq_date.split('-').reverse().join('/')
     const local = await getLocal(latitude, longitude)
-    const obj = { data, uf: local.state_code, cidade: local.town || local.village || local.city, frp, instrument }
+    const obj = { data, uf: local.state_code, cidade: local.town || local.village || local.city, frp }
 
     return obj
 }
@@ -54,7 +54,7 @@ async function getLocal(lat, lon) {
 
 
 // insert info in HTML
-async function insertTableItem({ cidade, data, frp, instrument, uf }) {
+async function insertTableItem({ cidade, data, frp, uf }) {
 
     const tr = document.createElement('tr')
 
@@ -62,8 +62,7 @@ async function insertTableItem({ cidade, data, frp, instrument, uf }) {
     <td>${data} </td>
     <td>${uf}</td>
     <td>${cidade} </td>
-    <td>${frp} </td>
-    <td>${instrument}</td>`
+    <td>${frp} </td>`
 
     fireTable.appendChild(tr)
 }
