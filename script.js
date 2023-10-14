@@ -21,15 +21,14 @@ async function insertTableItem({ acq_date, state_code, latitude, longitude, frp,
 
     const tr = document.createElement('tr')
 
-// precisei tirar o codigo da api de geolocalização por causa do limite de requisições atingidos
-// mas na atualização final, ele vai voltar
+    const rawLocation = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=45644761025242f8a8214fad9611eca8`)
+    const location = await rawLocation.json()
+    local = location.results[0].components
 
-let local = {message: "serviço indisponivel"}
-    
     tr.innerHTML = `
     <td>${acq_date} </td>
-    <td>${local.message}</td>
-    <td>${ local.message} </td>
+    <td>${local.state_code}</td>
+    <td>${local.town || local.village || local.city} </td>
     <td>${frp} </td>
     <td>${instrument}</td>`
 
