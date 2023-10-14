@@ -24,7 +24,8 @@ async function insertTableItem({ acq_date, state_code, latitude, longitude, frp,
 // precisei tirar o codigo da api de geolocalização por causa do limite de requisições atingidos
 // mas na atualização final, ele vai voltar
 
-
+let local = {message: "serviço indisponivel"}
+    
     tr.innerHTML = `
     <td>${acq_date} </td>
     <td>${local.state_code || local.message}</td>
