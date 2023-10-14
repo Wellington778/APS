@@ -1,6 +1,11 @@
 const fireTable = document.querySelector('.fire-table')
 const latestFireBanner = document.querySelector('.latest-fire')
 
+fireHotlink = "https://cdn-icons-png.flaticon.com/512/1759/1759484.png"
+const planeIcon = L.icon({
+    iconUrl: fireHotlink,
+    iconSize: [32, 32],
+});
 
 // get information from server
 async function getLatestFire() {
@@ -17,12 +22,16 @@ async function getFireInfo() {
 
     console.log(fireData);
     fireData.forEach(insertTableItem)
+		fireData.forEach(markFireInMap)
 }
 
 // get localizations
 async function getLocal(lat, lon) {
 
-    const rawLocation = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=45644761025242f8a8214fad9611eca8`)
+    // const rawLocation = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=45644761025242f8a8214fad9611eca8`)
+		const rawLocation = await 
+				fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=c6b6da0f80f24b299e08ee1075f81aa5&`) 
+
     const location = await rawLocation.json()
 
     return location.results[0].components
@@ -55,5 +64,28 @@ async function insertLatestFire({ latitude, longitude, frp }) {
     latestFireBanner.appendChild(fireData)
 }
 
+function setUpLeafletMap(){
+		const MAX_ZOOM = 19;
+
+		window.map = L.map('map').setView([-15.799077280776096, -47.860738116246424], 4);
+
+		/* Visit https://github.com/gpxstudio/gpxstudio.github.io/blob/5a16268db9da76aba7fe2bcdb17d4c04253ec409/js/layers.js for more layers */
+		L.tileLayer('https://maps.refuges.info/hiking/{z}/{x}/{y}.png', {
+        maxNativeZoom: 18,
+        maxZoom: MAX_ZOOM,
+        attribution: '&copy; <a href="https://wiki.openstreetmap.org/wiki/Hiking/mri" target="_blank">sly</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+    }).addTo(window.map);
+ 
+}
+
+async function markFireInMap( fireJSON ) {
+
+		var fire_circle = L.marker([fireJSON.latitude, fireJSON.longitude], {icon: planeIcon}).addTo(window.map);
+		
+		info = { country_id: fireJSON.country_id, acq_date: fireJSON.acq_date, acq_time: fireJSON.acq_time, latitude: fireJSON.latitude, longitude: fireJSON.longitude }
+		fire_circle.bindPopup(JSON.stringify(info).replace(",", ",\n"))
+}
+
 getFireInfo()
 getLatestFire()
+setUpLeafletMap()
