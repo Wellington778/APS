@@ -28,8 +28,8 @@ let local = {message: "serviço indisponivel"}
     
     tr.innerHTML = `
     <td>${acq_date} </td>
-    <td>${local.state_code || local.message}</td>
-    <td>${local.town || local.village || local.city || local.message} </td>
+    <td>${local.message}</td>
+    <td>${ local.message} </td>
     <td>${frp} </td>
     <td>${instrument}</td>`
 
