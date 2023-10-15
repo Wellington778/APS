@@ -24,11 +24,30 @@ async function getFireInfo() {
     return fireData
 }
 
-async function standardizeFireItem({ acq_date, latitude, longitude, frp, instrument }) {
+function formatAcqTime(acqTime) {
+    const hour = Math.floor(acqTime / 100);
+    const minute = acqTime % 100;
+    return `${hour}:${minute}`;
+}
 
+function kelvinToCelsius(kelvin) {
+    const celsius = kelvin - 273.15;
+    return celsius.toFixed(1);
+}
+
+async function standardizeFireItem({ acq_date, acq_time, latitude, bright_ti4, bright_ti5, longitude, frp, instrument, daynight }) {
+
+    let period = 'Dia'
+    if (daynight === 'N' || daynight === 'n') period = "Noite"
+
+    const hora = formatAcqTime(acq_time)
+
+    const i4 = kelvinToCelsius(bright_ti4)
+
+    console.log(hora);
     const data = acq_date.split('-').reverse().join('/')
     const local = await getLocal(latitude, longitude)
-    const obj = { data, uf: local.state_code, cidade: local.town || local.village || local.city, frp, instrument }
+    const obj = { data, hora, period, uf: local.state_code, cidade: local.town || local.village || local.city, frp, instrument, i4 }
 
     return obj
 }
@@ -47,22 +66,24 @@ async function getLocal(lat, lon) {
     const location = await rawLocation.json()
 
     return location.results[0].components
-
-    // return { state_code: "temp", town: "temp town" }
-
 }
 
 
 // insert info in HTML
-async function insertTableItem({ cidade, data, frp, instrument, uf }) {
+async function insertTableItem({ cidade, data, hora, frp, instrument, uf, period, i4 }) {
 
     const tr = document.createElement('tr')
 
     tr.innerHTML = `
-    <td>${data} </td>
+    <td>${data}</td>
+    <td>${hora}</td>
+    <td class="is-hidden-mobile">${period}</td>
     <td>${uf}</td>
     <td>${cidade} </td>
-    <td>${frp} </td>`
+    <td>${frp} </td>
+    <td class="is-hidden-mobile">${i4}</td>
+    <td class="is-hidden-mobile">${instrument}</td>
+    `
 
     fireTable.appendChild(tr)
 }
