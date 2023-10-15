@@ -24,11 +24,11 @@ async function getFireInfo() {
     return fireData
 }
 
-async function standardizeFireItem({ acq_date, latitude, longitude, frp }) {
+async function standardizeFireItem({ acq_date, latitude, longitude, frp, instrument }) {
 
     const data = acq_date.split('-').reverse().join('/')
     const local = await getLocal(latitude, longitude)
-    const obj = { data, uf: local.state_code, cidade: local.town || local.village || local.city, frp }
+    const obj = { data, uf: local.state_code, cidade: local.town || local.village || local.city, frp, instrument }
 
     return obj
 }
@@ -43,18 +43,18 @@ async function setStatus() {
 // get localizations
 async function getLocal(lat, lon) {
 
-    // const rawLocation = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=d7510e76a5fe423980b3734e6b3860ed`)
-    // const location = await rawLocation.json()
+    const rawLocation = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=0f986f9f65174095a324af07565f6a91`)
+    const location = await rawLocation.json()
 
-    // return location.results[0].components
+    return location.results[0].components
 
-    return { state_code: "temp", town: "temp town" }
+    // return { state_code: "temp", town: "temp town" }
 
 }
 
 
 // insert info in HTML
-async function insertTableItem({ cidade, data, frp, uf }) {
+async function insertTableItem({ cidade, data, frp, instrument, uf }) {
 
     const tr = document.createElement('tr')
 
@@ -84,7 +84,9 @@ fireInput.addEventListener('keyup', () => {
     fireTable.innerHTML = ''
     let input = String(fireInput.value).toLocaleLowerCase()
 
-    const filteredArray = normalizedFireArray.filter(({ cidade }) => String(cidade).includes(input))
+    const filteredArray = normalizedFireArray
+        .filter(({ cidade }) => String(cidade).toLocaleLowerCase().includes(input))
+    console.log(filteredArray);
     filteredArray.forEach(insertTableItem)
 })
 
