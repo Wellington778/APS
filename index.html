@@ -56,15 +56,15 @@
                 <table id="fire-table" class="table is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                            <th ondblclick="sortTable(0)">Data</th>
-                            <th ondblclick="sortTable(1)">Hora</th>
-                            <th class="is-hidden-mobile" ondblclick="sortTable(2)">Período</th>
-                            <th ondblclick="sortTable(3)">UF</th>
-                            <th ondblclick="sortTable(4)">Cidade</th>
+                            <th onclick="sortTable(0)">Data</th>
+                            <th onclick="sortTable(1)">Hora</th>
+                            <th class="is-hidden-mobile" onclick="sortTable(2)">Período</th>
+                            <th onclick="sortTable(3)">UF</th>
+                            <th onclick="sortTable(4)">Cidade</th>
 
-                            <th ondblclick="sortTable(5)">
+                            <th onclick="sortTable(5)" ondblclick="toggleDetails(this)">
                                 <span class="is-hidden-desktop">Intensidade do Incêndio</span>
-                                <details class="is-hidden-mobile">
+                                <details class="is-hidden-mobile details">
                                     <summary>Intensidade do Incêndio</summary>
                                     <p class="subtitle is-6">FRP mede a energia dos incêndios em megawatts. O algoritmo
                                         do sistema VIIRS foi ajustado para detectar principalmente incêndios menores,
@@ -72,9 +72,9 @@
                                         minuciosa.</p>
                                 </details>
                             </th>
-                            <th class="is-hidden-mobile" ondblclick="sortTable(6)">
+                            <th class="is-hidden-mobile" onclick="sortTable(6)" ondblclick="toggleDetails(this)">
                                 <span class="is-hidden-desktop">Temperatura (I 4)</span>
-                                <details class="is-hidden-mobile">
+                                <details class="is-hidden-mobile details">
                                     <summary>Temperatura (I 4)</summary>
                                     <p class="subtitle is-6">O canal VIIRS I-4 mede o calor gerado por um incêndio e o
                                         mostra em graus Kelvin (aqui está em graus celsius). As imagens resultantes têm
@@ -83,7 +83,7 @@
                                         diretamente para baixo. </p>
                                 </details>
                             </th>
-                            <th class="is-hidden-mobile" ondblclick="sortTable(7)">Satelite</th>
+                            <th class="is-hidden-mobile" onclick="sortTable(7)">Satelite</th>
                         </tr>
                     </thead>
 
@@ -103,6 +103,21 @@
 
 <script src="script.js"></script>
 <script>
+    const details = document.querySelector('.details')
+    function toggleDetails(det){
+        if(det.open)
+            det.open = false
+        else{        
+            det.open = true
+        }
+    }
+
+
+details.addEventListener('onclick', (e) => {
+    e.preventDefault()
+})
+
+    
     function sortTable(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("fire-table");
