@@ -35,7 +35,7 @@ function kelvinToCelsius(kelvin) {
     return celsius.toFixed(1);
 }
 
-async function standardizeFireItem({ acq_date, acq_time, latitude, bright_ti4, bright_ti5, longitude, frp, instrument, daynight }) {
+async function standardizeFireItem({ acq_date, acq_time, latitude, bright_ti4, longitude, frp, instrument, daynight }) {
 
     let period = 'Dia'
     if (daynight === 'N' || daynight === 'n') period = "Noite"
@@ -119,8 +119,8 @@ async function main() {
     allFireData.forEach((item) => {
         normalizedFireArray.push(standardizeFireItem(item))
     })
+    
     normalizedFireArray = await Promise.all(normalizedFireArray)
-
     normalizedFireArray.forEach(insertTableItem)
 }
 
