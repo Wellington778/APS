@@ -62,7 +62,7 @@
                             <th onclick="sortTable(3)">UF</th>
                             <th onclick="sortTable(4)">Cidade</th>
 
-                            <th onclick="sortTable(5)" ondblclick="toggleDetails(this)">
+                            <th onclick="sortTable(5)">
                                 <span class="is-hidden-desktop">Intensidade do Incêndio</span>
                                 <details class="is-hidden-mobile details">
                                     <summary>Intensidade do Incêndio</summary>
@@ -72,7 +72,7 @@
                                         minuciosa.</p>
                                 </details>
                             </th>
-                            <th class="is-hidden-mobile" onclick="sortTable(6)" ondblclick="toggleDetails(this)">
+                            <th class="is-hidden-mobile" onclick="sortTable(6)">
                                 <span class="is-hidden-desktop">Temperatura (I 4)</span>
                                 <details class="is-hidden-mobile details">
                                     <summary>Temperatura (I 4)</summary>
@@ -103,20 +103,6 @@
 
 <script src="script.js"></script>
 <script>
-    const details = document.querySelector('.details')
-    function toggleDetails(det){
-        if(det.open)
-            det.open = false
-        else{        
-            det.open = true
-        }
-    }
-
-
-details.addEventListener('onclick', (e) => {
-    e.preventDefault()
-})
-
     
     function sortTable(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
