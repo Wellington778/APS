@@ -44,7 +44,6 @@ async function standardizeFireItem({ acq_date, acq_time, latitude, bright_ti4, l
 
     const i4 = kelvinToCelsius(bright_ti4)
 
-    console.log(hora);
     const data = acq_date.split('-').reverse().join('/')
     const local = await getLocal(latitude, longitude)
     const obj = { data, hora, period, uf: local.state_code, cidade: local.town || local.village || local.city, frp, instrument, i4 }
